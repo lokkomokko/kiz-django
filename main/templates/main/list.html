@@ -1,0 +1,27 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    <a href="{% url 'index' %}">назад</a>
+
+    <ul>
+        {% for i in object_list %}
+            <li>Код - {{ i.code_name }}, Пол - {{ i.sex }}, Возраст - {{ i.adult_age }}, Число дней - {{ i.days }} <a
+                    href="{% url 'update' pk=i.id %}">изменить</a> <a href="{% url 'delete' item_id=i.id %}">удалить</a></li>
+        {% endfor %}
+    </ul>
+    {% if is_paginated %}
+        <div class="pagination">
+            <span class="page-links">
+                {% if page_obj.has_previous %}
+                    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
+                {% endif %}
+                <span class="page-current">
+                    Cтраница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
+                </span>
+                {% if page_obj.has_next %}
+                    <a href="?page={{ page_obj.next_page_number }}">Следующая страница</a>
+                {% endif %}
+            </span>
+        </div>
+    {% endif %}
+{% endblock %}

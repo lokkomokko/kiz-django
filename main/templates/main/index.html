@@ -1,1 +1,242 @@
+{% extends 'main/main.html' %}
 
+
+{% block content %}
+{#<script src="https://cdn.jsdelivr.net/npm/vue"></script>#}
+    {{ request.user.username }}: <a href="{% url 'logout' %}">Выйти</a>
+    <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Добавить случай</button>
+    </form>
+    {% if data %}
+        <h2>{{ more_case|default:'Добавленные последние случаи :' }}</h2>
+        <ul>
+            {% for i in data %}
+                <li>Код - {{ i.code_name }}, Пол - {{ i.sex }}, Возраст - {{ i.adult_age }}, Число дней - {{ i.days }} <a
+                        href="{% url 'update' pk=i.id %}">изменить</a> <a href="{% url 'delete' item_id=i.id %}">удалить</a></li>
+            {% endfor %}
+        </ul>
+
+        {% if not more_case %}
+            <a href="{% url 'list' %}">Посмотреть все случаи</a>
+        {% endif %}
+
+
+        <h3>Таблица:</h3>
+    <div id="app">
+
+{#        <form style="margin-top: 30px;">#}
+{#            <label for="">#}
+{#                Выбрать болезнь:#}
+{#            </label>#}
+{#            <select id="list" multiple="multiple" name="" id="">#}
+{#                {% for i in sicks %}#}
+{#                    <option value="{{ i.name }}" data-section="{{ i.name }}">#}
+{#                        {{ i.name }}#}
+{#                    </option>#}
+{#                    {% for b in under_group %}#}
+{#                        {{ b.group_name_id }}#}
+{#                        {% if b.group_name_id == i.id %}#}
+{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
+{#                                {{ b.name }}#}
+{#                            </option>#}
+{#                        {% endif %}#}
+{#                    {% endfor %}#}
+{##}
+{#                {% endfor %}#}
+{#            </select>#}
+{#            <label for="">Пол</label>#}
+{#            <select name="" id="">#}
+{#                <option value="муж">муж</option>#}
+{#                <option value="жен">жен</option>#}
+{##}
+{##}
+{#            </select>#}
+{#            <label for="">Возраст</label>#}
+{#            <select name="" id="">#}
+{#                {% for i in age_range %}#}
+{#                    <option value="{{ i.name }}">{{ i.name }}</option>#}
+{#                {% endfor %}#}
+{##}
+{#            </select>#}
+{#        </form>#}
+
+{#        <table>#}
+{#            <thead>#}
+{#            <tr>#}
+{#                <th colspan="5" style="border: none"></th>#}
+{#                <th colspan="9">Возраст</th>#}
+{#            </tr>#}
+{##}
+{#            <tr>#}
+{#                <th>Причина нетрудоспособности</th>#}
+{#                <th>Шифр по МКБ Х пересмотра</th>#}
+{#                <th>Пол</th>#}
+{#                <th>Число дней временной нетрудоспособности</th>#}
+{#                <th>Число случаев временной нетрудоспособности</th>#}
+{##}
+{#                <td>15-19</td>#}
+{#                <td>20-24</td>#}
+{#                <td>30-34</td>#}
+{#                <td>35-39</td>#}
+{#                <td>40-44</td>#}
+{#                <td>45-49</td>#}
+{#                <td>50-54</td>#}
+{#                <td>55-59</td>#}
+{#                <td>60 лет и старше</td>#}
+{##}
+{##}
+{#            </thead>#}
+{#            <tbody>#}
+{##}
+{#            {% for i in sicks %}#}
+{#                {% with bb=i.sicksundergroup_set.all %}#}
+{#                {% with ss=i.sickssingle_set.all.values %}#}
+{#                {% if bb %}#}
+{#                    {% for b in bb %}#}
+{#                        {% with bss=b.sickssingle_set.all.values %}#}
+{#                        {% if forloop.first %}#}
+{#                        <tr>#}
+{#                            <th>{{ i.name }}</th>#}
+{#                            <td>#}
+{#                                {% for s in ss %}#}
+{#                                    {{ s.name }}#}
+{#                                    {% if not forloop.last %}#}
+{#                                        ,#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </td>#}
+{#                            <td>310000</td>#}
+{#                            <td>5 234 434</td>#}
+{#                            <td>10% скидка</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                        </tr>#}
+{#                        {% endif %}#}
+{#                        <tr>#}
+{#                            <td>{{ b.name }}</td>#}
+{#                            <td>#}
+{#                                {% for s in bss %}#}
+{#                                    {{ s.name }}#}
+{#                                    {% if not forloop.last %}#}
+{#                                        ,#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </td>#}
+{#                            <td>310000</td>#}
+{#                            <td>5 234 434</td>#}
+{#                            <td>10% скидка</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                        </tr>#}
+{#                    {% endwith %}#}
+{##}
+{#                    {% endfor %}#}
+{#                {% else %}#}
+{#                        <tr>#}
+{#                            <th>{{ i.name }}</th>#}
+{#                            <td>#}
+{#                                {% for s in ss %}#}
+{#                                    {{ s.name }}#}
+{#                                    {% if not forloop.last %}#}
+{#                                        ,#}
+{#                                    {% endif %}#}
+{#                                {% endfor %}#}
+{#                            </td>#}
+{#                            <td>310000</td>#}
+{#                            <td>5 234 434</td>#}
+{#                            <td>10% скидка</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                            <td>58</td>#}
+{#                        </tr>#}
+{#                {% endif %}#}
+{#                {% endwith %}#}
+{#                {% endwith %}#}
+{##}
+{##}
+{#            {% endfor %}#}
+{##}
+{##}
+{#            </tbody>#}
+{##}
+{#        </table>#}
+{##}
+
+    {% with table.findTable as  table%}
+        {% for c in table %}
+            <pre>
+            {{ c }}
+
+            </pre>
+        {% endfor %}
+    {% endwith %}
+
+
+    </div>
+    {% endif %}
+
+    {% csrf_token %}
+{#    <script>#}
+        {#window.onload = function () {#}
+
+        {#var app = new Vue({#}
+        {#    delimiters: ['[[', ']]'],#}
+        {#    el: '#app',#}
+        {#    data: {#}
+        {#        message: 'Hello Vue!'#}
+        {#    },#}
+        {##}
+        {##}
+        {##}
+        {#    $("#list").treeMultiselect({#}
+        {#        searchable: true,#}
+        {#        maxSelections: 1,#}
+        {#        startCollapsed: true#}
+        {#    });#}
+        {#    $('.search').attr('placeholder', 'Поиск')#}
+        {##}
+        {#    var csrftoken = $("[name=csrfmiddlewaretoken]").val();#}
+        {#    var user_id = {{ request.user.id }}#}
+        {##}
+            {#console.log(user_id)#}
+        {##}
+        {#    $.ajaxSetup({#}
+        {#        beforeSend: function(xhr) {#}
+        {#            xhr.setRequestHeader("X-CSRFToken", csrftoken);#}
+        {#        }#}
+        {#    });#}
+        {##}
+        {#    $.post('api',#}
+        {#        {#}
+        {#            'user_id' : user_id,#}
+        {#        },#}
+        {#        function (data) {#}
+        {#            console.log(data)#}
+        {#        }#}
+        {#    )#}
+
+{#    </script>#}
+
+{% endblock %}

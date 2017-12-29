@@ -1,4 +1,7 @@
 from django.contrib import admin
-from .models import Med
+from .models import *
 
-admin.site.register(Med)
+admin.site.register([Med,Sicks, SicksSingle, SicksUndergroup, AgeRange])
+
+
+
