@@ -1,5 +1,6 @@
 from datetime import datetime
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import JSONField
 from django.db import models
 from django import forms
 from django.forms import ModelForm, SelectDateWidget
@@ -72,6 +73,14 @@ class AgeRange(models.Model):
     class Meta:
         verbose_name_plural = 'Диапазоны возрастов'
         verbose_name = 'Диапазон возрастов'
+
+class Table(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    data = JSONField(null=True)
+    data_all_count = JSONField(null=True)
+
+    def __str__(self):
+        return 'Таблица для ' + self.user
 
 
 class Med(models.Model):
@@ -187,11 +196,12 @@ class MedUpdate(UpdateView):
         return context
 
     def form_valid(self, form):
+        from .modules import table
         instance = form.save(commit=False)
         instance.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
         instance.code_id_id = self.request.POST['code']
         instance.save()
-
+        table.findTable(list(Med.objects.filter(user_id=self.request.user.pk)), self.request.user.pk)
         return redirect('/')
 
     def dispatch(self, request, *args, **kwargs):

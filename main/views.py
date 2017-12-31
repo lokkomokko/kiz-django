@@ -1,3 +1,4 @@
+from django.db import connection
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse, Http404
 from django.contrib.auth import login, authenticate
@@ -16,7 +17,10 @@ def index(request):
                 new_item.user_id = u_id
                 new_item.code_id_id = request.POST['code']
                 new_item.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
+
                 new_item.save()
+
+                table.findTable(list(Med.objects.filter(user_id=u_id)), u_id)
                 return redirect('index')
                 # return HttpResponse()
         else:
@@ -24,6 +28,14 @@ def index(request):
             sicks = Sicks.objects.all().values()
             single = SicksSingle.objects.all().values()
             under_group = SicksUndergroup.objects.values()
+            try: Table.objects.get(user_id=u_id)
+            except Table.DoesNotExist:
+                table_json = False
+            else:
+                table_json = Table.objects.get(user_id=u_id)
+                import json
+                table_json.data = json.loads(table_json.data)
+                table_json.data_all_count = json.loads(table_json.data_all_count)
 
             count_case = Med.objects.filter(user_id=u_id).count()
             more_case = 'Добавленные случаи: '
@@ -39,10 +51,10 @@ def index(request):
             'data': data,
             'sicks': sicks,
             'under_group' : under_group,
-            # 'age_range' : age_range,
+            'table_json' : table_json,
             'single' : single,
             'more_case' : more_case,
-            'table' : table.findTable(list(Med.objects.filter(user_id=u_id))),
+            # 'table' : table.findTable(list(Med.objects.filter(user_id=u_id)), u_id),
             'nums': [2,6,9,13,17, 22,30, 34, 36, 38, 44]
         })
     else:
@@ -55,6 +67,7 @@ def delete(request, item_id):
         if str(item.user) != request.user.username:
             return HttpResponse('Вы пытаетесь удалить не свою запись. Не надо')
         item.delete()
+        table.findTable(list(Med.objects.filter(user_id=request.user.pk)), request.user.pk)
         return redirect('index')
     else:
         return redirect('login')
@@ -77,17 +90,24 @@ def signup(request):
 
 
 def api(request):
-    table = ['dsd']
+    # ТЕСТОВЫЕ ДАННЫЕ
+    # cursor = connection.cursor()
+    # from random import randint
+    # d = randint(1, 52)
+    # import random
+    # foo = ['муж', 'жен']
+    #
+    # c = random.choice(foo)
+    # i = 0
+    # while i <= 500:
+    #     cursor.execute(
+    #         "INSERT INTO main_med (code_id_id, code_name, sex, adult, adult_age, adult_range_id, days, user_id, pub_date, date_1, date_2) VALUES (%s, 'test', %s, '1945-01-01'::date, 40, 10, 1, 1, '2017-12-31T13:10:49.570332+00:00'::timestamptz, '1970-01-01'::date, '1970-01-01'::date) ",
+    #         [d, c])
+    #     i = i + 1
 
-    data = list(Med.objects.all())
-    sicks = list(Sicks.objects.all())
-    underSicks = list(SicksUndergroup.objects.all())
-    singleSick = list(SicksSingle.objects.all())
+    return render(request, 'main/api.html', {'data': Med.objects.all()})
 
-    for sick in Sicks.objects.all():
-        table = sick.name
-
-    return HttpResponse(table)
+    # return HttpResponse(Med.objects.all())
     # return render(request, 'maim/api.html', {
     #     'data': data,
     #     'sicks': sicks,

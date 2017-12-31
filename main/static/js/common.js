@@ -27,6 +27,14 @@ if  ($('#app table').length >= 1) {
                 startCollapsed: true
             });
             $('.search').attr('placeholder', 'Поиск')
+
+$('#create').click(function (e) {
+    if($('#list').val() == false) {
+        e.preventDefault()
+        e.stopPropagation()
+        alert('Выберите код болезни')
+    }
+})
 // $(document).ready(function () {
 //     $('.buttons-print span').text('Распечатать')
 // })

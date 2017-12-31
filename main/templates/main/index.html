@@ -27,9 +27,7 @@
                     {% for b in under_group %}
 
                         {% if b.group_name_id == i.id %}
-{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
-{#                                {{ b.name }}#}
-{#                            </option>#}
+
                             {% for s in single %}
                                 {% if s.under_group_name_id == b.id %}
                                     <option value="{{ s.id }}" data-section="{{ i.name }}/{{ b.name }}">
@@ -43,7 +41,7 @@
 
                 {% endfor %}
             </select>
-    <button type="submit">Добавить случай</button>
+    <button type="submit" id="create">Добавить случай</button>
     </form>
     {% if data %}
         <h2>{{ more_case|default:'Добавленные последние случаи :' }}</h2>
@@ -63,6 +61,7 @@
     <div id="app">
 
 
+    {% if table_json %}
         <table>
             <thead>
             <tr>
@@ -92,7 +91,7 @@
             </thead>
             <tbody>
 
-            {% for col in table.0 %}
+            {% for col in table_json.data %}
                     <tr>
                         <td>
                             {% if col.under_group %}
@@ -134,7 +133,7 @@
 
             {% endfor %}
                 <tr>
-                    {% with table.1.only_sick as i  %}
+                    {% with table_json.data_all_count.only_sick as i  %}
 
                     <td><b>Всего по заболеваниям</b></td>
                     <td></td>
@@ -155,7 +154,7 @@
 
                 </tr>
                 <tr>
-                   {% with table.1.with_sick as i  %}
+                   {% with table_json.data_all_count.with_sick as i  %}
 
                     <td><b>ИТОГО ПО ВСЕМ ПРИЧИНАМ</b></td>
                     <td></td>
@@ -175,7 +174,7 @@
                     {% endwith %}
                 </tr>
                 <tr>
-                    {% with table.1.all as i  %}
+                    {% with table_json.data_all_count.all as i  %}
 
                     <td><b>ВСЕГО</b></td>
                     <td></td>
@@ -200,6 +199,7 @@
 
         </table>
 
+    {% endif %}
 
 
 

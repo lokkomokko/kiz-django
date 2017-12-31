@@ -1,4 +1,5 @@
 from main.models import *
+import json
 
 data = list(Med.objects.all())
 sicks = list(Sicks.objects.all())
@@ -158,7 +159,7 @@ class TableCreate:
         return codes
 
 
-def findTable(data=data):
+def findTable(data=data, user=1):
     table = []
 
     counter = 0
@@ -361,8 +362,17 @@ def findTable(data=data):
     res_array['with_sick'] = res[0]
     res_array['all'] = res[1]
 
+    ready_table = json.dumps(ready_table)
+    res_array = json.dumps(res_array)
+
     # print(res_array)
-    return [ready_table, res_array]
+    user_table, created = Table.objects.get_or_create(user_id=user, defaults={'user_id': user, 'data':ready_table, 'data_all_count' : res_array})
+
+    user_table.data = ready_table
+    user_table.data_all_count = res_array
+    user_table.save()
+
+    # return [ready_table, res_array]
 
 
 # findTable()
