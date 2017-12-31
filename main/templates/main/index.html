@@ -4,9 +4,45 @@
 {% block content %}
 {#<script src="https://cdn.jsdelivr.net/npm/vue"></script>#}
     {{ request.user.username }}: <a href="{% url 'logout' %}">Выйти</a>
+
+{#    {{ table.findTable }}#}
     <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
+
+            <label for="">
+                Выбрать болезнь:
+            </label>
+            <select id="list" multiple="multiple" name="code" id="">
+                {% for i in sicks %}
+                   {% for s in single %}
+                        {% if s.group_name_id == i.id %}
+                            <option value="{{ s.id }}" data-section="{{ i.name }}">
+                            {{ s.name }}
+                            </option>
+                        {% endif %}
+
+                   {% endfor %}
+
+                    {% for b in under_group %}
+
+                        {% if b.group_name_id == i.id %}
+{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
+{#                                {{ b.name }}#}
+{#                            </option>#}
+                            {% for s in single %}
+                                {% if s.under_group_name_id == b.id %}
+                                    <option value="{{ s.id }}" data-section="{{ i.name }}/{{ b.name }}">
+                                        {{ s.name }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                {% endfor %}
+            </select>
     <button type="submit">Добавить случай</button>
     </form>
     {% if data %}
@@ -26,172 +62,147 @@
         <h3>Таблица:</h3>
     <div id="app">
 
-{#        <form style="margin-top: 30px;">#}
-{#            <label for="">#}
-{#                Выбрать болезнь:#}
-{#            </label>#}
-{#            <select id="list" multiple="multiple" name="" id="">#}
-{#                {% for i in sicks %}#}
-{#                    <option value="{{ i.name }}" data-section="{{ i.name }}">#}
-{#                        {{ i.name }}#}
-{#                    </option>#}
-{#                    {% for b in under_group %}#}
-{#                        {{ b.group_name_id }}#}
-{#                        {% if b.group_name_id == i.id %}#}
-{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
-{#                                {{ b.name }}#}
-{#                            </option>#}
-{#                        {% endif %}#}
-{#                    {% endfor %}#}
-{##}
-{#                {% endfor %}#}
-{#            </select>#}
-{#            <label for="">Пол</label>#}
-{#            <select name="" id="">#}
-{#                <option value="муж">муж</option>#}
-{#                <option value="жен">жен</option>#}
-{##}
-{##}
-{#            </select>#}
-{#            <label for="">Возраст</label>#}
-{#            <select name="" id="">#}
-{#                {% for i in age_range %}#}
-{#                    <option value="{{ i.name }}">{{ i.name }}</option>#}
-{#                {% endfor %}#}
-{##}
-{#            </select>#}
-{#        </form>#}
 
-{#        <table>#}
-{#            <thead>#}
-{#            <tr>#}
-{#                <th colspan="5" style="border: none"></th>#}
-{#                <th colspan="9">Возраст</th>#}
-{#            </tr>#}
-{##}
-{#            <tr>#}
-{#                <th>Причина нетрудоспособности</th>#}
-{#                <th>Шифр по МКБ Х пересмотра</th>#}
-{#                <th>Пол</th>#}
-{#                <th>Число дней временной нетрудоспособности</th>#}
-{#                <th>Число случаев временной нетрудоспособности</th>#}
-{##}
-{#                <td>15-19</td>#}
-{#                <td>20-24</td>#}
-{#                <td>30-34</td>#}
-{#                <td>35-39</td>#}
-{#                <td>40-44</td>#}
-{#                <td>45-49</td>#}
-{#                <td>50-54</td>#}
-{#                <td>55-59</td>#}
-{#                <td>60 лет и старше</td>#}
-{##}
-{##}
-{#            </thead>#}
-{#            <tbody>#}
-{##}
-{#            {% for i in sicks %}#}
-{#                {% with bb=i.sicksundergroup_set.all %}#}
-{#                {% with ss=i.sickssingle_set.all.values %}#}
-{#                {% if bb %}#}
-{#                    {% for b in bb %}#}
-{#                        {% with bss=b.sickssingle_set.all.values %}#}
-{#                        {% if forloop.first %}#}
-{#                        <tr>#}
-{#                            <th>{{ i.name }}</th>#}
-{#                            <td>#}
-{#                                {% for s in ss %}#}
-{#                                    {{ s.name }}#}
-{#                                    {% if not forloop.last %}#}
-{#                                        ,#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                            </td>#}
-{#                            <td>310000</td>#}
-{#                            <td>5 234 434</td>#}
-{#                            <td>10% скидка</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                        </tr>#}
-{#                        {% endif %}#}
-{#                        <tr>#}
-{#                            <td>{{ b.name }}</td>#}
-{#                            <td>#}
-{#                                {% for s in bss %}#}
-{#                                    {{ s.name }}#}
-{#                                    {% if not forloop.last %}#}
-{#                                        ,#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                            </td>#}
-{#                            <td>310000</td>#}
-{#                            <td>5 234 434</td>#}
-{#                            <td>10% скидка</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                        </tr>#}
-{#                    {% endwith %}#}
-{##}
-{#                    {% endfor %}#}
-{#                {% else %}#}
-{#                        <tr>#}
-{#                            <th>{{ i.name }}</th>#}
-{#                            <td>#}
-{#                                {% for s in ss %}#}
-{#                                    {{ s.name }}#}
-{#                                    {% if not forloop.last %}#}
-{#                                        ,#}
-{#                                    {% endif %}#}
-{#                                {% endfor %}#}
-{#                            </td>#}
-{#                            <td>310000</td>#}
-{#                            <td>5 234 434</td>#}
-{#                            <td>10% скидка</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                            <td>58</td>#}
-{#                        </tr>#}
-{#                {% endif %}#}
-{#                {% endwith %}#}
-{#                {% endwith %}#}
-{##}
-{##}
-{#            {% endfor %}#}
-{##}
-{##}
-{#            </tbody>#}
-{##}
-{#        </table>#}
-{##}
+        <table>
+            <thead>
+            <tr>
+                <th colspan="5" style="border: none"></th>
+                <th colspan="10">Возраст</th>
+            </tr>
 
-    {% with table.findTable as  table%}
-        {% for c in table %}
-            <pre>
-            {{ c }}
+            <tr>
+                <th>Причина нетрудоспособности</th>
+                <th>Шифр по МКБ Х пересмотра</th>
+                <th>Пол</th>
+                <th>Число дней временной нетрудоспособности</th>
+                <th>Число случаев временной нетрудоспособности</th>
 
-            </pre>
-        {% endfor %}
-    {% endwith %}
+                <td>15-19</td>
+                <td>20-24</td>
+                <td>25-29</td>
+                <td>30-34</td>
+                <td>35-39</td>
+                <td>40-44</td>
+                <td>45-49</td>
+                <td>50-54</td>
+                <td>55-59</td>
+                <td>60 лет и старше</td>
+
+
+            </thead>
+            <tbody>
+
+            {% for col in table.0 %}
+                    <tr>
+                        <td>
+                            {% if col.under_group %}
+                                {% if forloop.counter in nums %}
+                                    В том числе:
+                                {% endif %} {{ col.under_group }}
+
+                            {% else %}
+                                <b>{{ col.name }}</b>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if col.main_group_codes %}
+                                {{ col.main_group_codes }}
+                            {% else %}
+                                {% for c in col.all_codes %}
+                                    {{ c }} {% if not forloop.last %},{% endif %}
+                                {% endfor %}
+
+                            {% endif %}
+
+
+
+                        </td>
+                        <td>{{ col.data.man.sex }} <hr> {{ col.data.girl.sex }}</td>
+                        <td>{{ col.data.man.days }} <hr> {{ col.data.girl.days }}</td>
+                        <td>{{ col.data.man.all_cases }} <hr> {{ col.data.girl.all_cases }}</td>
+                        <td>{{ col.data.man.ag.1 }} <hr> {{ col.data.girl.ag.1 }}</td>
+                        <td>{{ col.data.man.ag.2 }} <hr> {{ col.data.girl.ag.2 }}</td>
+                        <td>{{ col.data.man.ag.3 }} <hr> {{ col.data.girl.ag.3 }}</td>
+                        <td>{{ col.data.man.ag.4 }} <hr> {{ col.data.girl.ag.4 }}</td>
+                        <td>{{ col.data.man.ag.5 }} <hr> {{ col.data.girl.ag.5 }}</td>
+                        <td>{{ col.data.man.ag.6 }} <hr> {{ col.data.girl.ag.6 }}</td>
+                        <td>{{ col.data.man.ag.7 }} <hr> {{ col.data.girl.ag.7 }}</td>
+                        <td>{{ col.data.man.ag.8 }} <hr> {{ col.data.girl.ag.8 }}</td>
+                        <td>{{ col.data.man.ag.9 }} <hr> {{ col.data.girl.ag.9 }}</td>
+                        <td>{{ col.data.man.ag.10 }}<hr> {{ col.data.girl.ag.10 }}</td>
+                    </tr>
+
+            {% endfor %}
+                <tr>
+                    {% with table.1.only_sick as i  %}
+
+                    <td><b>Всего по заболеваниям</b></td>
+                    <td></td>
+                    <td>муж<hr>жен</td>
+                    <td>{{ i.man.days }}<hr> {{ i.girl.days }}</td>
+                    <td>{{ i.man.all_cases }}<hr> {{ i.girl.all_cases }}</td>
+                    <td>{{ i.man.ag.1 }}<hr> {{ i.girl.ag.1 }}</td>
+                    <td>{{ i.man.ag.2 }}<hr> {{ i.girl.ag.2 }}</td>
+                    <td>{{ i.man.ag.3 }}<hr> {{ i.girl.ag.3 }}</td>
+                    <td>{{ i.man.ag.4 }}<hr> {{ i.girl.ag.4 }}</td>
+                    <td>{{ i.man.ag.5 }}<hr> {{ i.girl.ag.5 }}</td>
+                    <td>{{ i.man.ag.6 }}<hr> {{ i.girl.ag.6 }}</td>
+                    <td>{{ i.man.ag.7 }}<hr> {{ i.girl.ag.7 }}</td>
+                    <td>{{ i.man.ag.8 }}<hr> {{ i.girl.ag.8 }}</td>
+                    <td>{{ i.man.ag.9 }}<hr> {{ i.girl.ag.9 }}</td>
+                    <td>{{ i.man.ag.10 }}<hr> {{ i.girl.ag.10 }}</td>
+                    {% endwith %}
+
+                </tr>
+                <tr>
+                   {% with table.1.with_sick as i  %}
+
+                    <td><b>ИТОГО ПО ВСЕМ ПРИЧИНАМ</b></td>
+                    <td></td>
+                    <td>муж<hr>жен</td>
+                    <td>{{ i.man.days }}<hr> {{ i.girl.days }}</td>
+                    <td>{{ i.man.all_cases }}<hr> {{ i.girl.all_cases }}</td>
+                    <td>{{ i.man.ag.1 }}<hr> {{ i.girl.ag.1 }}</td>
+                    <td>{{ i.man.ag.2 }}<hr> {{ i.girl.ag.2 }}</td>
+                    <td>{{ i.man.ag.3 }}<hr> {{ i.girl.ag.3 }}</td>
+                    <td>{{ i.man.ag.4 }}<hr> {{ i.girl.ag.4 }}</td>
+                    <td>{{ i.man.ag.5 }}<hr> {{ i.girl.ag.5 }}</td>
+                    <td>{{ i.man.ag.6 }}<hr> {{ i.girl.ag.6 }}</td>
+                    <td>{{ i.man.ag.7 }}<hr> {{ i.girl.ag.7 }}</td>
+                    <td>{{ i.man.ag.8 }}<hr> {{ i.girl.ag.8 }}</td>
+                    <td>{{ i.man.ag.9 }}<hr> {{ i.girl.ag.9 }}</td>
+                    <td>{{ i.man.ag.10 }}<hr> {{ i.girl.ag.10 }}</td>
+                    {% endwith %}
+                </tr>
+                <tr>
+                    {% with table.1.all as i  %}
+
+                    <td><b>ВСЕГО</b></td>
+                    <td></td>
+                    <td></td>
+                    <td>{{ i.days }}</td>
+                    <td>{{ i.all_cases }}</td>
+                    <td>{{ i.ag.1 }}</td>
+                    <td>{{ i.ag.2 }}</td>
+                    <td>{{ i.ag.3 }}</td>
+                    <td>{{ i.ag.4 }}</td>
+                    <td>{{ i.ag.5 }}</td>
+                    <td>{{ i.ag.6 }}</td>
+                    <td>{{ i.ag.7 }}</td>
+                    <td>{{ i.ag.8 }}</td>
+                    <td>{{ i.ag.9 }}</td>
+                    <td>{{ i.ag.10 }}</td>
+                    {% endwith %}
+                </tr>
+
+
+            </tbody>
+
+        </table>
+
+
+
+
 
 
     </div>

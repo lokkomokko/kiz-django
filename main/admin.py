@@ -1,7 +1,11 @@
 from django.contrib import admin
 from .models import *
 
-admin.site.register([Med,Sicks, SicksSingle, SicksUndergroup, AgeRange])
+class SicksUndergroupAdmin(admin.ModelAdmin):
+    list_display = ('name', 'group_name')
 
+admin.site.register([Med,Sicks, SicksSingle, AgeRange])
+
+admin.site.register(SicksUndergroup, SicksUndergroupAdmin)
 
 

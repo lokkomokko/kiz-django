@@ -14,20 +14,24 @@ def index(request):
             if form.is_valid():
                 new_item = form.save()
                 new_item.user_id = u_id
+                new_item.code_id_id = request.POST['code']
                 new_item.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
                 new_item.save()
                 return redirect('index')
                 # return HttpResponse()
         else:
             form = MedForm()
-            sicks = Sicks.objects.all()
+            sicks = Sicks.objects.all().values()
+            single = SicksSingle.objects.all().values()
+            under_group = SicksUndergroup.objects.values()
+
             count_case = Med.objects.filter(user_id=u_id).count()
             more_case = 'Добавленные случаи: '
             if  count_case > 10:
                 more_case = False
 
             data = Med.objects.filter(user_id=u_id)[:10].values()
-            under_group = SicksUndergroup.objects.values()
+
             age_range = AgeRange.objects.values()
 
         return render(request, 'main/index.html', {
@@ -35,9 +39,11 @@ def index(request):
             'data': data,
             'sicks': sicks,
             'under_group' : under_group,
-            'age_range' : age_range,
+            # 'age_range' : age_range,
+            'single' : single,
             'more_case' : more_case,
-            'table' : table
+            'table' : table.findTable(list(Med.objects.filter(user_id=u_id))),
+            'nums': [2,6,9,13,17, 22,30, 34, 36, 38, 44]
         })
     else:
         return redirect('login')
@@ -46,6 +52,8 @@ def index(request):
 def delete(request, item_id):
     if request.user.is_authenticated:
         item = get_object_or_404(Med, pk=item_id)
+        if str(item.user) != request.user.username:
+            return HttpResponse('Вы пытаетесь удалить не свою запись. Не надо')
         item.delete()
         return redirect('index')
     else:

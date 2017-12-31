@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django import forms
 from django.forms import ModelForm, SelectDateWidget
+from django.http import Http404, HttpResponse
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.utils.timezone import now
@@ -11,6 +12,8 @@ from django.views.generic import UpdateView, ListView
 
 class Sicks(models.Model):
     name = models.CharField(max_length=300, verbose_name='Наименование группы')
+    main_group_codes = models.CharField(max_length=150, verbose_name='Коды главной группы', blank=True, null=True)
+    only_sick = models.BooleanField(verbose_name='Болезнь', default=True)
 
     def __str__(self):
         return self.name
@@ -81,6 +84,8 @@ class Med(models.Model):
     days = models.IntegerField(verbose_name='Число дней', default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, )
     pub_date = models.DateTimeField(auto_now_add=True)
+    date_1 = models.DateField(verbose_name='С ', help_text='Период болезни', null=True)
+    date_2 = models.DateField( verbose_name='По', null=True)
 
     methods = MedManager
 
@@ -102,7 +107,14 @@ class Med(models.Model):
 
     def save(self, *args, **kwargs):
         from datetime import date
-        self.code_name = str(self.code_id)
+
+        id = self.code_id_id
+        ss = SicksSingle.objects.all().values()
+        name = 'error'
+        for s in ss:
+            if id == str(s['id']):
+                name = s['name']
+        self.code_name = name
         # self.code_name = self.date_1
         self.adult_age = date.today().year - self.adult.year
         # self.days =
@@ -146,15 +158,17 @@ class Med(models.Model):
 
 
 class MedForm(ModelForm):
-    date_1 = forms.DateField(widget=SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)), label='С ',
-                             help_text='Период болезни')
-    date_2 = forms.DateField(widget=SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)), label='По')
+    # date_1 = forms.DateField(widget=SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)), label='С ',
+    #                          help_text='Период болезни')
+    # date_2 = forms.DateField(widget=SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)), label='По')
 
     class Meta:
         model = Med
-        fields = ['code_id', 'sex', 'adult']
+        fields = ['sex', 'adult', 'date_1', 'date_2']
         widgets = {
             'adult': SelectDateWidget(empty_label="Nothing", years=range(1945, 2020)),
+            'date_1': SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)),
+            'date_2': SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)),
         }
 
 
@@ -164,13 +178,37 @@ class MedUpdate(UpdateView):
     form_class = MedForm
     success_url = '/'
 
+    def get_context_data(self, **kwargs):
+        context = super(MedUpdate, self).get_context_data(**kwargs)
+        context['sicks'] = Sicks.objects.all().values()
+        context['single'] = SicksSingle.objects.all().values()
+        context['under_group'] = SicksUndergroup.objects.values()
+
+        return context
+
     def form_valid(self, form):
         instance = form.save(commit=False)
         instance.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
+        instance.code_id_id = self.request.POST['code']
         instance.save()
 
         return redirect('/')
 
+    def dispatch(self, request, *args, **kwargs):
+        # Try to dispatch to the right method; if a method doesn't exist,
+        # defer to the error handler. Also defer to the error handler if the
+        # request method isn't on the approved list.
+        if  request.user.username != str(self.get_object().user):
+            return HttpResponse('Вы пытаетесь обновить не свою запись. Это невозможно.')
+        if request.method.lower() in self.http_method_names:
+            handler = getattr(self, request.method.lower(), self.http_method_not_allowed)
+        else:
+            handler = self.http_method_not_allowed
+
+        self.request = request
+        self.args = args
+        self.kwargs = kwargs
+        return handler(request, *args, **kwargs)
 
 class MedList(ListView):
     model = Med

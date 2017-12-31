@@ -3,7 +3,30 @@ if  ($('#app table').length >= 1) {
         'language' : {
             'url': '//cdn.datatables.net/plug-ins/1.10.16/i18n/Russian.json'
         },
-        "ordering": false
-
+        "ordering": false,
+        dom: 'Blfrtip',
+'buttons': [{
+    extend: 'print',
+    text: 'Распечатать',
+    exportOptions: {
+        stripHtml: false
+    }
+}, {
+    extend: 'pdf',
+    text: 'Save PDF',
+    exportOptions: {
+        stripNewlines: false
+    }
+}
+],
     });
 }
+            $("#list").treeMultiselect({
+                searchable: true,
+                maxSelections: 1,
+                startCollapsed: true
+            });
+            $('.search').attr('placeholder', 'Поиск')
+// $(document).ready(function () {
+//     $('.buttons-print span').text('Распечатать')
+// })
