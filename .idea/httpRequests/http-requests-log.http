@@ -1,0 +1,92 @@
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T015055.403.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T015015.404.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014913.500.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014825.500.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014752.500.html
+
+###
+
+GET http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014749.200.html
+
+###
+
+GET http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014640.500.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014636.500.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014625.500.html
+
+###
+
+POST http://localhost:8082/api
+Accept:*/*
+Cache-Control:no-cache
+
+<> 2017-12-25T014556.500.html
+
+###
+
+GET http://localhost:8080/resources
+Accept:*/*
+Cache-Control:no-cache
+
+###
+

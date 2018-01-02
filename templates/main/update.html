@@ -59,4 +59,12 @@
     <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
     <script src="{% static 'js/jquery.tree-multiselect.min.js' %}"></script>
     <script src="{% static 'js/common.js' %}"></script>
+
+        <script>
+        var django = django || {};
+        django.jQuery = $;
+    </script>
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    {{ form.media }}
 {% endblock %}
