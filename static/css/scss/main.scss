@@ -193,11 +193,19 @@ input {
 	input {
 		border: 1px solid $accent;
 		text-align: center;
+		font-size: 14px;
 
 	}
 	&__top {
 		p {
 			margin-bottom: 10px;
+			&:nth-child(3), &:nth-child(4) {
+				label {
+					font-size: .8em;
+					text-transform: lowercase;
+					//color: $accent;
+				}
+			}
 		}
 	}
 	a {
@@ -210,7 +218,20 @@ input {
 	}
 	.datetimeshortcuts {
 		margin-right: 10px;
+		color: transparent;
+		margin-left: -5px;
+		a {
+			&:first-of-type {
+				display: none;
+			}
+		}
 	}
+	.helptext {
+    font-size: 1em;
+    color: $fontColor;
+    width: 100%;
+    order: -2;
+}
 }
 
 .calendar caption, .calendarbox h2 {
@@ -244,7 +265,13 @@ input {
 }
 
 div.tree-multiselect div.title {
-	background-color: #f97474;
+	//background-color: #f97474;
+	background-color: #f974746e;
+	color: $fontColor;
+	//border-bottom: 1px solid $accent;
+	//border-left: 1px solid $accent;
+	//border-right: 1px solid $accent;
+
 	font-family: Roboto;
 	font-size: 14px;
 	line-height: 1.4;
@@ -298,9 +325,20 @@ div.tree-multiselect span.section-name {
 	bottom: -89px;
 	transform: rotate(-3deg)
 }
-
+.girl3 {
+		width: 509px;
+	height: auto;
+	position: absolute;
+	bottom: -22px;
+	right: 0;
+}
+.gif {
+	position: absolute;
+	right: 0;
+	top: -40px;
+}
 .last {
-	margin-bottom: 40px;
+	margin-bottom: 85px;
 
 	&__title {
 		margin-bottom: 1em;
@@ -335,7 +373,7 @@ div.tree-multiselect span.section-name {
 	margin-bottom: 100px;
 	&__title {
 		text-align: center;
-		margin-bottom: 30px;
+		margin-bottom: -35px;
 	}
 	select {
 		color: $fontColor;
@@ -362,6 +400,9 @@ div.tree-multiselect span.section-name {
 	b {
 		color: $accent;
 	}
+}
+.dataTables_length {
+	margin-bottom: 15px;
 }
 .paginate_button:hover, .paginate_button.current{
 		background: $accent !important;
@@ -402,6 +443,32 @@ table.dataTable.no-footer {
 			border-left: 1px solid;
 
 }
+.dataTable {
+		hr {
+	    background-color: $fontColor !important;
+	}
+}
 thead th, tfoot td {
 	border-color: $fontColor;
+}
+.table-last {
+	    text-align: center;
+    line-height: 30px;vertical-align: middle;
+
+}
+.table-col {
+	//padding: 0 !important;
+	    vertical-align: middle;
+	span{
+		min-height: 30px;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		    //display: block;
+    //text-align: center;
+		&:first-of-type {
+			//border-bottom: 1px solid;
+		}
+	}
+
 }

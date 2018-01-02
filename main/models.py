@@ -95,7 +95,7 @@ class Med(models.Model):
     days = models.IntegerField(verbose_name='Число дней', default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, )
     pub_date = models.DateTimeField(auto_now_add=True)
-    date_1 = models.DateField(verbose_name='С ', help_text='Период болезни', null=False, default=now())
+    date_1 = models.DateField(verbose_name='С ', help_text='Период болезни:', null=False, default=now())
     date_2 = models.DateField( verbose_name='По', null=False, default=now())
 
     methods = MedManager

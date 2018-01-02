@@ -9,13 +9,13 @@ if ($('#app table').length >= 1) {
             extend: 'print',
             text: 'Распечатать',
             exportOptions: {
-                stripHtml: false
+                stripHtml: true
             }
         }, {
             extend: 'pdf',
             text: 'Save PDF',
             exportOptions: {
-                stripNewlines: false
+                stripNewlines: true
             }
         }
         ],
@@ -29,16 +29,26 @@ $("#list").treeMultiselect({
 });
 $('.search').attr('placeholder', 'Поиск')
 
+var regex = /^(0?[1-9]|[12][0-9]|3[01])[\/\-\.](0?[1-9]|1[012])[\/\-\.](\d{4})$/
+
 $('#create').click(function (e) {
     if ($('#list').val() == false) {
         e.preventDefault()
         e.stopPropagation()
         alert('Выберите код болезни')
     }
+    else if (regex.test($('#id_date_1').val()) == false || regex.test($('#id_date_2').val()) == false) {
+        e.preventDefault()
+        e.stopPropagation()
+        alert('Введите корректную дату')
+    }
 })
 $(document).ready(function () {
-    if($('.add').length >= 1) {
-        $('.tree-multiselect').append("<img class='girl2' src='http://orig10.deviantart.net/9f5c/f/2015/192/3/c/girl_and_blade_anime_render_by_schorch2812_d7j5mha_by_harunanami-d90wcmt.png'>")
+    if ($('.main_page').length >= 1) {
+        $('.tree-multiselect').append("<img class='girl2' src='/static/img/girl2.png'>")
+    }
+    if ($('.update_page').length >= 1) {
+        $('.tree-multiselect').append("<img class='girl3' src='/static/img/girl3.png'>")
     }
 
     if ($('#app').length >= 1) {

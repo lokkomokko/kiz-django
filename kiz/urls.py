@@ -16,12 +16,14 @@ Including another URLconf
 import django
 from django.contrib import admin
 from django.urls import path, include
+from django.views.i18n import JavaScriptCatalog
 
 from kiz import settings
 
 urlpatterns = [
+    path('admin/jsi18n/', JavaScriptCatalog.as_view()),
     path('admin/', admin.site.urls),
-    path('', include('main.urls'))
+    path('', include('main.urls')),
 ]
 
 if settings.DEBUG:

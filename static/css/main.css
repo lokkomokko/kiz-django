@@ -204,16 +204,29 @@ input {
   margin-right: 5px; }
 .add input {
   border: 1px solid #ff8d8d;
-  text-align: center; }
+  text-align: center;
+  font-size: 14px; }
 .add__top p {
   margin-bottom: 10px; }
+  .add__top p:nth-child(3) label, .add__top p:nth-child(4) label {
+    font-size: .8em;
+    text-transform: lowercase; }
 .add a {
   color: #2d2d2d;
   text-decoration: underline; }
 .add .date-icon {
   filter: grayscale(1); }
 .add .datetimeshortcuts {
-  margin-right: 10px; }
+  margin-right: 10px;
+  color: transparent;
+  margin-left: -5px; }
+  .add .datetimeshortcuts a:first-of-type {
+    display: none; }
+.add .helptext {
+  font-size: 1em;
+  color: #2d2d2d;
+  width: 100%;
+  order: -2; }
 
 .calendar caption, .calendarbox h2 {
   background-color: #ff8d8d;
@@ -235,7 +248,8 @@ input {
   color: #ff8d8d; }
 
 div.tree-multiselect div.title {
-  background-color: #f97474;
+  background-color: #f974746e;
+  color: #2d2d2d;
   font-family: Roboto;
   font-size: 14px;
   line-height: 1.4; }
@@ -280,8 +294,20 @@ div.tree-multiselect span.section-name {
   bottom: -89px;
   transform: rotate(-3deg); }
 
+.girl3 {
+  width: 509px;
+  height: auto;
+  position: absolute;
+  bottom: -22px;
+  right: 0; }
+
+.gif {
+  position: absolute;
+  right: 0;
+  top: -40px; }
+
 .last {
-  margin-bottom: 40px; }
+  margin-bottom: 85px; }
   .last__title {
     margin-bottom: 1em;
     display: inline-block; }
@@ -308,7 +334,7 @@ div.tree-multiselect span.section-name {
   margin-bottom: 100px; }
   .app__title {
     text-align: center;
-    margin-bottom: 30px; }
+    margin-bottom: -35px; }
   .app select {
     color: #2d2d2d;
     background-color: #fff;
@@ -325,6 +351,9 @@ div.tree-multiselect span.section-name {
     background: #fff; }
   .app b {
     color: #ff8d8d; }
+
+.dataTables_length {
+  margin-bottom: 15px; }
 
 .paginate_button:hover, .paginate_button.current {
   background: #ff8d8d !important;
@@ -360,7 +389,23 @@ table.dataTable.no-footer {
   border-bottom: none;
   border-left: 1px solid; }
 
+.dataTable hr {
+  background-color: #2d2d2d !important; }
+
 thead th, tfoot td {
   border-color: #2d2d2d; }
+
+.table-last {
+  text-align: center;
+  line-height: 30px;
+  vertical-align: middle; }
+
+.table-col {
+  vertical-align: middle; }
+  .table-col span {
+    min-height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center; }
 
 /*# sourceMappingURL=main.css.map */

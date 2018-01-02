@@ -10,13 +10,15 @@
 {% block content %}
 
 
-    <div class="container wrapper relative">
+    <div class="container wrapper relative main_page">
         <h1 class="title-main">Панель</h1>
         <div class="user">
             Привет, {{ request.user.username }}.<br> <a class="link" href="{% url 'logout' %}">Выйти</a>
         </div>
 
-        <form method="post" class="add">
+        <h3 class="title-h3" style="margin-bottom:20px;">Добавить случай: </h3>
+        <form method="post" class="add relative">
+{#            <img class="gif" src="https://78.media.tumblr.com/16986d01dd975abb15f65e4e2bb82a9b/tumblr_o4vwecHmUN1u2yfqbo1_500.gif" alt="">#}
             {% csrf_token %}
             <div class="add__top">
                 {{ form.as_p }}
@@ -62,11 +64,11 @@
                 <ul class="last__ul">
                     {% for i in data %}
                         <li class="last__item">
-                            <span class="col-2">Код - {{ i.code_name }}</span>
-                            <span class="col-2">Пол - {{ i.sex }}</span>
-                            <span class="col-2">Возраст - {{ i.adult_age }}</span>
-                            <span class="col-2"> Число дней
-                            - {{ i.days }}</span>
+                            <span class="col-2">Код: {{ i.code_name }}</span>
+                            <span class="col-2">Пол: {{ i.sex }}</span>
+                            <span class="col-2">Возраст: {{ i.adult_age }}</span>
+                            <span class="col-2"> Число дней:
+                                {{ i.days }}</span>
                             <a class="link" href="{% url 'update' pk=i.id %}">изменить</a>
                             <a class="link link--del" href="{% url 'delete' item_id=i.id %}">удалить</a></li>
                     {% endfor %}
@@ -82,229 +84,219 @@
     <div class="app container-fluid justify-content-center" id="app">
 
 
-                {% if table_json %}
-                        <h3 class="app__title title-h3">Таблица:</h3>
+        {% if data %}
+            {% if table_json %}
+                <h3 class="app__title title-h3">Таблица:</h3>
 
-                    <table>
-                        <thead>
+                <table>
+                    <thead>
+                    <tr>
+                        <th colspan="5" style="border: none"></th>
+                        <th colspan="10">Возраст</th>
+                    </tr>
+
+                    <tr>
+                        <th>Причина нетрудоспособности</th>
+                        <th>Шифр по МКБ Х пересмотра</th>
+                        <th>Пол</th>
+                        <th>Число дней временной нетрудоспособности</th>
+                        <th>Число случаев временной нетрудоспособности</th>
+
+                        <td>15-19</td>
+                        <td>20-24</td>
+                        <td>25-29</td>
+                        <td>30-34</td>
+                        <td>35-39</td>
+                        <td>40-44</td>
+                        <td>45-49</td>
+                        <td>50-54</td>
+                        <td>55-59</td>
+                        <td>60 лет и старше</td>
+
+
+                    </thead>
+                    <tbody>
+
+                    {% for col in table_json.data %}
                         <tr>
-                            <th colspan="5" style="border: none"></th>
-                            <th colspan="10">Возраст</th>
+                            <td>
+                                {% if col.under_group %}
+                                    {% if forloop.counter in nums %}
+                                        В том числе:
+                                    {% endif %} {{ col.under_group }}
+
+                                {% else %}
+                                    <b>{{ col.name }}</b>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if col.main_group_codes %}
+                                    {{ col.main_group_codes }}
+                                {% else %}
+                                    {% for c in col.all_codes %}
+                                        {{ c }} {% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+
+                                {% endif %}
+
+
+                            </td>
+                            <td class="table-col"><span>{{ col.data.man.sex }}</span>
+                                <span>{{ col.data.girl.sex }}</span></td>
+
+                            <td class="table-col"><span>{{ col.data.man.days }}</span><hr>
+                                <span>{{ col.data.girl.days }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.all_cases }}</span><hr>
+                                <span>{{ col.data.girl.all_cases }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.1 }}</span><hr>
+                                <span>{{ col.data.girl.ag.1 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.2 }}</span><hr>
+                                <span>{{ col.data.girl.ag.2 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.3 }}</span><hr>
+                                <span>{{ col.data.girl.ag.3 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.4 }}</span><hr>
+                                <span>{{ col.data.girl.ag.4 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.5 }}</span><hr>
+                                <span>{{ col.data.girl.ag.5 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.6 }}</span><hr>
+                                <span>{{ col.data.girl.ag.6 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.7 }}</span><hr>
+                                <span>{{ col.data.girl.ag.7 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.8 }}</span><hr>
+                                <span>{{ col.data.girl.ag.8 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.9 }}</span><hr>
+                                <span>{{ col.data.girl.ag.9 }}</span></td>
+                            <td class="table-col"><span>{{ col.data.man.ag.10 }}</span><hr>
+                                <span>{{ col.data.girl.ag.10 }}</span></td>
                         </tr>
 
-                        <tr>
-                            <th>Причина нетрудоспособности</th>
-                            <th>Шифр по МКБ Х пересмотра</th>
-                            <th>Пол</th>
-                            <th>Число дней временной нетрудоспособности</th>
-                            <th>Число случаев временной нетрудоспособности</th>
+                    {% endfor %}
+                    <tr>
+                        {% with table_json.data_all_count.only_sick as i %}
 
-                            <td>15-19</td>
-                            <td>20-24</td>
-                            <td>25-29</td>
-                            <td>30-34</td>
-                            <td>35-39</td>
-                            <td>40-44</td>
-                            <td>45-49</td>
-                            <td>50-54</td>
-                            <td>55-59</td>
-                            <td>60 лет и старше</td>
+                            <td><b>Всего по заболеваниям</b></td>
+                            <td></td>
+                            <td class="table-last">муж
+                                <hr>
+                                жен
+                            </td>
+                            <td class="table-last">{{ i.man.days }}
+                                <hr>
+                                {{ i.girl.days }}</td>
+                            <td class="table-last">{{ i.man.all_cases }}
+                                <hr>
+                                {{ i.girl.all_cases }}</td>
+                            <td class="table-last">{{ i.man.ag.1 }}
+                                <hr>
+                                {{ i.girl.ag.1 }}</td>
+                            <td class="table-last">{{ i.man.ag.2 }}
+                                <hr>
+                                {{ i.girl.ag.2 }}</td>
+                            <td class="table-last">{{ i.man.ag.3 }}
+                                <hr>
+                                {{ i.girl.ag.3 }}</td>
+                            <td class="table-last">{{ i.man.ag.4 }}
+                                <hr>
+                                {{ i.girl.ag.4 }}</td>
+                            <td class="table-last">{{ i.man.ag.5 }}
+                                <hr>
+                                {{ i.girl.ag.5 }}</td>
+                            <td class="table-last">{{ i.man.ag.6 }}
+                                <hr>
+                                {{ i.girl.ag.6 }}</td>
+                            <td class="table-last">{{ i.man.ag.7 }}
+                                <hr>
+                                {{ i.girl.ag.7 }}</td>
+                            <td class="table-last">{{ i.man.ag.8 }}
+                                <hr>
+                                {{ i.girl.ag.8 }}</td>
+                            <td class="table-last">{{ i.man.ag.9 }}
+                                <hr>
+                                {{ i.girl.ag.9 }}</td>
+                            <td class="table-last">{{ i.man.ag.10 }}
+                                <hr>
+                                {{ i.girl.ag.10 }}</td>
+                        {% endwith %}
 
+                    </tr>
+                    <tr>
+                        {% with table_json.data_all_count.with_sick as i %}
 
-                        </thead>
-                        <tbody>
+                            <td><b>ИТОГО ПО ВСЕМ ПРИЧИНАМ</b></td>
+                            <td></td>
+                            <td class="table-last">муж
+                                <hr>
+                                жен
+                            </td>
+                            <td class="table-last">{{ i.man.days }}
+                                <hr>
+                                {{ i.girl.days }}</td>
+                            <td class="table-last">{{ i.man.all_cases }}
+                                <hr>
+                                {{ i.girl.all_cases }}</td>
+                            <td class="table-last">{{ i.man.ag.1 }}
+                                <hr>
+                                {{ i.girl.ag.1 }}</td>
+                            <td class="table-last">{{ i.man.ag.2 }}
+                                <hr>
+                                {{ i.girl.ag.2 }}</td>
+                            <td class="table-last">{{ i.man.ag.3 }}
+                                <hr>
+                                {{ i.girl.ag.3 }}</td>
+                            <td class="table-last">{{ i.man.ag.4 }}
+                                <hr>
+                                {{ i.girl.ag.4 }}</td>
+                            <td class="table-last">{{ i.man.ag.5 }}
+                                <hr>
+                                {{ i.girl.ag.5 }}</td>
+                            <td class="table-last">{{ i.man.ag.6 }}
+                                <hr>
+                                {{ i.girl.ag.6 }}</td>
+                            <td class="table-last">{{ i.man.ag.7 }}
+                                <hr>
+                                {{ i.girl.ag.7 }}</td>
+                            <td class="table-last">{{ i.man.ag.8 }}
+                                <hr>
+                                {{ i.girl.ag.8 }}</td>
+                            <td class="table-last">{{ i.man.ag.9 }}
+                                <hr>
+                                {{ i.girl.ag.9 }}</td>
+                            <td class="table-last">{{ i.man.ag.10 }}
+                                <hr>
+                                {{ i.girl.ag.10 }}</td>
+                        {% endwith %}
+                    </tr>
+                    <tr>
+                        {% with table_json.data_all_count.all as i %}
 
-                        {% for col in table_json.data %}
-                            <tr>
-                                <td>
-                                    {% if col.under_group %}
-                                        {% if forloop.counter in nums %}
-                                            В том числе:
-                                        {% endif %} {{ col.under_group }}
-
-                                    {% else %}
-                                        <b>{{ col.name }}</b>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    {% if col.main_group_codes %}
-                                        {{ col.main_group_codes }}
-                                    {% else %}
-                                        {% for c in col.all_codes %}
-                                            {{ c }} {% if not forloop.last %},{% endif %}
-                                        {% endfor %}
-
-                                    {% endif %}
-
-
-                                </td>
-                                <td>{{ col.data.man.sex }}
-                                    <hr>
-                                    {{ col.data.girl.sex }}</td>
-                                <td>{{ col.data.man.days }}
-                                    <hr>
-                                    {{ col.data.girl.days }}</td>
-                                <td>{{ col.data.man.all_cases }}
-                                    <hr>
-                                    {{ col.data.girl.all_cases }}</td>
-                                <td>{{ col.data.man.ag.1 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.1 }}</td>
-                                <td>{{ col.data.man.ag.2 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.2 }}</td>
-                                <td>{{ col.data.man.ag.3 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.3 }}</td>
-                                <td>{{ col.data.man.ag.4 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.4 }}</td>
-                                <td>{{ col.data.man.ag.5 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.5 }}</td>
-                                <td>{{ col.data.man.ag.6 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.6 }}</td>
-                                <td>{{ col.data.man.ag.7 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.7 }}</td>
-                                <td>{{ col.data.man.ag.8 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.8 }}</td>
-                                <td>{{ col.data.man.ag.9 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.9 }}</td>
-                                <td>{{ col.data.man.ag.10 }}
-                                    <hr>
-                                    {{ col.data.girl.ag.10 }}</td>
-                            </tr>
-
-                        {% endfor %}
-                        <tr>
-                            {% with table_json.data_all_count.only_sick as i %}
-
-                                <td><b>Всего по заболеваниям</b></td>
-                                <td></td>
-                                <td>муж
-                                    <hr>
-                                    жен
-                                </td>
-                                <td>{{ i.man.days }}
-                                    <hr>
-                                    {{ i.girl.days }}</td>
-                                <td>{{ i.man.all_cases }}
-                                    <hr>
-                                    {{ i.girl.all_cases }}</td>
-                                <td>{{ i.man.ag.1 }}
-                                    <hr>
-                                    {{ i.girl.ag.1 }}</td>
-                                <td>{{ i.man.ag.2 }}
-                                    <hr>
-                                    {{ i.girl.ag.2 }}</td>
-                                <td>{{ i.man.ag.3 }}
-                                    <hr>
-                                    {{ i.girl.ag.3 }}</td>
-                                <td>{{ i.man.ag.4 }}
-                                    <hr>
-                                    {{ i.girl.ag.4 }}</td>
-                                <td>{{ i.man.ag.5 }}
-                                    <hr>
-                                    {{ i.girl.ag.5 }}</td>
-                                <td>{{ i.man.ag.6 }}
-                                    <hr>
-                                    {{ i.girl.ag.6 }}</td>
-                                <td>{{ i.man.ag.7 }}
-                                    <hr>
-                                    {{ i.girl.ag.7 }}</td>
-                                <td>{{ i.man.ag.8 }}
-                                    <hr>
-                                    {{ i.girl.ag.8 }}</td>
-                                <td>{{ i.man.ag.9 }}
-                                    <hr>
-                                    {{ i.girl.ag.9 }}</td>
-                                <td>{{ i.man.ag.10 }}
-                                    <hr>
-                                    {{ i.girl.ag.10 }}</td>
-                            {% endwith %}
-
-                        </tr>
-                        <tr>
-                            {% with table_json.data_all_count.with_sick as i %}
-
-                                <td><b>ИТОГО ПО ВСЕМ ПРИЧИНАМ</b></td>
-                                <td></td>
-                                <td>муж
-                                    <hr>
-                                    жен
-                                </td>
-                                <td>{{ i.man.days }}
-                                    <hr>
-                                    {{ i.girl.days }}</td>
-                                <td>{{ i.man.all_cases }}
-                                    <hr>
-                                    {{ i.girl.all_cases }}</td>
-                                <td>{{ i.man.ag.1 }}
-                                    <hr>
-                                    {{ i.girl.ag.1 }}</td>
-                                <td>{{ i.man.ag.2 }}
-                                    <hr>
-                                    {{ i.girl.ag.2 }}</td>
-                                <td>{{ i.man.ag.3 }}
-                                    <hr>
-                                    {{ i.girl.ag.3 }}</td>
-                                <td>{{ i.man.ag.4 }}
-                                    <hr>
-                                    {{ i.girl.ag.4 }}</td>
-                                <td>{{ i.man.ag.5 }}
-                                    <hr>
-                                    {{ i.girl.ag.5 }}</td>
-                                <td>{{ i.man.ag.6 }}
-                                    <hr>
-                                    {{ i.girl.ag.6 }}</td>
-                                <td>{{ i.man.ag.7 }}
-                                    <hr>
-                                    {{ i.girl.ag.7 }}</td>
-                                <td>{{ i.man.ag.8 }}
-                                    <hr>
-                                    {{ i.girl.ag.8 }}</td>
-                                <td>{{ i.man.ag.9 }}
-                                    <hr>
-                                    {{ i.girl.ag.9 }}</td>
-                                <td>{{ i.man.ag.10 }}
-                                    <hr>
-                                    {{ i.girl.ag.10 }}</td>
-                            {% endwith %}
-                        </tr>
-                        <tr>
-                            {% with table_json.data_all_count.all as i %}
-
-                                <td><b>ВСЕГО</b></td>
-                                <td></td>
-                                <td></td>
-                                <td>{{ i.days }}</td>
-                                <td>{{ i.all_cases }}</td>
-                                <td>{{ i.ag.1 }}</td>
-                                <td>{{ i.ag.2 }}</td>
-                                <td>{{ i.ag.3 }}</td>
-                                <td>{{ i.ag.4 }}</td>
-                                <td>{{ i.ag.5 }}</td>
-                                <td>{{ i.ag.6 }}</td>
-                                <td>{{ i.ag.7 }}</td>
-                                <td>{{ i.ag.8 }}</td>
-                                <td>{{ i.ag.9 }}</td>
-                                <td>{{ i.ag.10 }}</td>
-                            {% endwith %}
-                        </tr>
+                            <td><b>ВСЕГО</b></td>
+                            <td></td>
+                            <td></td>
+                            <td class="table-last">{{ i.days }}</td>
+                            <td class="table-last">{{ i.all_cases }}</td>
+                            <td class="table-last">{{ i.ag.1 }}</td>
+                            <td class="table-last">{{ i.ag.2 }}</td>
+                            <td class="table-last">{{ i.ag.3 }}</td>
+                            <td class="table-last">{{ i.ag.4 }}</td>
+                            <td class="table-last">{{ i.ag.5 }}</td>
+                            <td class="table-last">{{ i.ag.6 }}</td>
+                            <td class="table-last">{{ i.ag.7 }}</td>
+                            <td class="table-last">{{ i.ag.8 }}</td>
+                            <td class="table-last">{{ i.ag.9 }}</td>
+                            <td class="table-last">{{ i.ag.10 }}</td>
+                        {% endwith %}
+                    </tr>
 
 
-                        </tbody>
+                    </tbody>
 
-                    </table>
+                </table>
 
-                {% endif %}
+            {% endif %}
+        {% endif %}
 
 
-            </div>
+    </div>
 
 
 {% endblock %}

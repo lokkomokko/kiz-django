@@ -1,31 +1,42 @@
 {% extends 'main/main.html' %}
 
-{% block content %}
-<h2>Обновить запись</h2>
-<form action="" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
+{% block extra_header %}
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/base.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css"/>
+{% endblock %}
 
-                <select id="list" multiple="multiple" name="code" id="">
+{% block content %}
+
+    <div class="container wrapper update_page" style="margin-bottom: 100px;">
+        <h2 class="title-main">Изменить запись</h2>
+        <form method="post" class="add">
+            {% csrf_token %}
+            <div class="add__top">
+                {{ form.as_p }}
+            </div>
+
+            <label for="" style="margin-bottom: 10px;display: inline-block;">
+                Выбрать болезнь:
+            </label>
+            <select id="list" multiple="multiple" name="code" >
                 {% for i in sicks %}
-                   {% for s in single %}
+                    {% for s in single %}
                         {% if s.group_name_id == i.id %}
-                            <option {% if object.code_id_id == s.id %}selected="selected"{% endif %} value="{{ s.id }}" data-section="{{ i.name }}">
-                            {{ s.name }}
+                            <option value="{{ s.id }}" {% if object.code_id_id == s.id %}selected="selected"{% endif %} data-section="{{ i.name }}">
+                                {{ s.name }}
                             </option>
                         {% endif %}
 
-                   {% endfor %}
+                    {% endfor %}
 
                     {% for b in under_group %}
 
                         {% if b.group_name_id == i.id %}
-{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
-{#                                {{ b.name }}#}
-{#                            </option>#}
+
                             {% for s in single %}
                                 {% if s.under_group_name_id == b.id %}
-                                    <option {% if object.code_id_id == s.id %}selected="selected"{% endif %} value="{{ s.id }}" data-section="{{ i.name }}/{{ b.name }}">
+                                    <option value="{{ s.id }}" {% if object.code_id_id == s.id %}selected="selected"{% endif %} data-section="{{ i.name }}/{{ b.name }}">
                                         {{ s.name }}
                                     </option>
                                 {% endif %}
@@ -36,7 +47,16 @@
 
                 {% endfor %}
             </select>
-    <input type="submit" value="Обновить" />
-</form>
+            <button class="btn" type="submit" id="create">Обновить</button>
+        </form>
+     <a class="link"  href="{% url 'index' %}">назад</a>
+    </div>
 
+{% endblock %}
+
+{% block footer_js %}
+    {% load static %}
+    <script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/jquery.tree-multiselect.min.js' %}"></script>
+    <script src="{% static 'js/common.js' %}"></script>
 {% endblock %}

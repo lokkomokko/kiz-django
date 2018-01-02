@@ -1,27 +1,40 @@
 {% extends 'main/main.html' %}
 
 {% block content %}
-    <a href="{% url 'index' %}">назад</a>
 
-    <ul>
-        {% for i in object_list %}
-            <li>Код - {{ i.code_name }}, Пол - {{ i.sex }}, Возраст - {{ i.adult_age }}, Число дней - {{ i.days }} <a
-                    href="{% url 'update' pk=i.id %}">изменить</a> <a href="{% url 'delete' item_id=i.id %}">удалить</a></li>
-        {% endfor %}
-    </ul>
+
+<div class="container wrapper " style="margin-bottom: 100px">
+    <div class="title-main">
+        Список всех случаев
+    </div>
+                <ul class="last__ul">
+                    {% for i in object_list %}
+                        <li class="last__item">
+                            <span class="col-2">Код: {{ i.code_name }}</span>
+                            <span class="col-2">Пол: {{ i.sex }}</span>
+                            <span class="col-2">Возраст: {{ i.adult_age }}</span>
+                            <span class="col-2"> Число дней:
+                                {{ i.days }}</span>
+                            <a class="link" href="{% url 'update' pk=i.id %}">изменить</a>
+                            <a class="link link--del" href="{% url 'delete' item_id=i.id %}">удалить</a></li>
+                    {% endfor %}
+                </ul>
+
     {% if is_paginated %}
-        <div class="pagination">
+        <div class="pagination" style="margin-bottom: 30px;" >
             <span class="page-links">
                 {% if page_obj.has_previous %}
-                    <a href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
+                    <a class="link" href="?page={{ page_obj.previous_page_number }}">Предыдущая страница</a>
                 {% endif %}
                 <span class="page-current">
                     Cтраница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}.
                 </span>
                 {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}">Следующая страница</a>
+                    <a class="link" href="?page={{ page_obj.next_page_number }}">Следующая страница</a>
                 {% endif %}
             </span>
         </div>
     {% endif %}
+     <a class="link"  href="{% url 'index' %}">назад</a>
+</div>
 {% endblock %}
