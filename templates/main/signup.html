@@ -1,0 +1,21 @@
+{% extends 'main/main.html' %}
+
+{% load static  %}
+
+{% block content %}
+    <div class="container wrapper">
+        <h2 class="title-main">Регистрация</h2>
+
+        <div class="content">
+            <div class="sign">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn" type="submit">Зарегистрироваться</button>
+                </form>
+                <a class="sign__link link" href="{% url 'index' %}">Назад</a>
+            </div>
+        </div>
+        <img class="sign__anime" src="{% static 'img/girl.png' %}" alt="">
+    </div>
+{% endblock %}

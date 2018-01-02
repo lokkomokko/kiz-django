@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from django.contrib.admin.widgets import AdminDateWidget
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import JSONField
 from django.db import models
@@ -93,8 +95,8 @@ class Med(models.Model):
     days = models.IntegerField(verbose_name='Число дней', default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, )
     pub_date = models.DateTimeField(auto_now_add=True)
-    date_1 = models.DateField(verbose_name='С ', help_text='Период болезни', null=True)
-    date_2 = models.DateField( verbose_name='По', null=True)
+    date_1 = models.DateField(verbose_name='С ', help_text='Период болезни', null=False, default=now())
+    date_2 = models.DateField( verbose_name='По', null=False, default=now())
 
     methods = MedManager
 
@@ -176,8 +178,8 @@ class MedForm(ModelForm):
         fields = ['sex', 'adult', 'date_1', 'date_2']
         widgets = {
             'adult': SelectDateWidget(empty_label="Nothing", years=range(1945, 2020)),
-            'date_1': SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)),
-            'date_2': SelectDateWidget(empty_label="Nothing", years=range(1970, 2020)),
+            'date_1': AdminDateWidget(),
+            'date_2': AdminDateWidget(),
         }
 
 

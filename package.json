@@ -1,0 +1,30 @@
+{
+  "name": "kiz",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "browser-sync": "browser-sync start --files \"static/css/**/*.**, static/js/*.js, templates/**/*.html\" --proxy 127.0.0.1:8082 --reload-delay=300 --reload-debounce=500",
+    "start": "concurrently --kill-others  \"python3 manage.py runserver 8082\" \"npm run browser-sync\" ",
+    "css": "postcss static/css/main.css --use autoprefixer -d static/css/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lokkomokko/kiz-django.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lokkomokko/kiz-django/issues"
+  },
+  "homepage": "https://github.com/lokkomokko/kiz-django#readme",
+  "devDependencies": {
+    "browser-sync": "^2.23.1",
+    "concurrently": "^3.5.1",
+    "node-sass": "^4.7.2"
+  },
+  "dependencies": {
+    "autoprefixer": "^7.2.3",
+    "postcss-cli": "^4.1.1"
+  }
+}

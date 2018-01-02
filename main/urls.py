@@ -15,5 +15,6 @@ urlpatterns = [
     path('logout/', auth_views.logout, {'next_page': '/'}, name='logout'),
     path('password_reset/', auth_views.password_reset, name='password_reset'),
     path('password_reset/done/', auth_views.password_reset_done, name='password_reset_done'),
-    path('api', views.api, name='api')
+    path('api', views.api, name='api'),
+
 ]

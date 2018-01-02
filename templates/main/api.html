@@ -1,0 +1,10 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+    <h1>Привеsт{{ data.count }}</h1>
+
+    {% for datum in data %}
+    {{ datum }}
+    {% endfor %}
+
+{% endblock %}

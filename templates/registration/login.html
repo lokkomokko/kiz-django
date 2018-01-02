@@ -1,0 +1,20 @@
+{% extends 'main/main.html' %}
+
+
+{% block content %}
+    <div class="container reg__wrap">
+        <div class="row justify-content-center">
+            <div class="reg col-3">
+                <h1 class="reg__title">Войти на сайт</h1>
+
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="reg__btn btn" type="submit">Войти</button>
+                </form>
+
+                <a class="reg__sign link" style="margin-top: 40px;display: inline-block" href="{% url 'signup' %}">Зарегистрироваться</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

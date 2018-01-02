@@ -1,0 +1,42 @@
+{% extends 'main/main.html' %}
+
+{% block content %}
+<h2>Обновить запись</h2>
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+                <select id="list" multiple="multiple" name="code" id="">
+                {% for i in sicks %}
+                   {% for s in single %}
+                        {% if s.group_name_id == i.id %}
+                            <option {% if object.code_id_id == s.id %}selected="selected"{% endif %} value="{{ s.id }}" data-section="{{ i.name }}">
+                            {{ s.name }}
+                            </option>
+                        {% endif %}
+
+                   {% endfor %}
+
+                    {% for b in under_group %}
+
+                        {% if b.group_name_id == i.id %}
+{#                            <option value="{{ b.name }}" data-section="{{ i.name }}">#}
+{#                                {{ b.name }}#}
+{#                            </option>#}
+                            {% for s in single %}
+                                {% if s.under_group_name_id == b.id %}
+                                    <option {% if object.code_id_id == s.id %}selected="selected"{% endif %} value="{{ s.id }}" data-section="{{ i.name }}/{{ b.name }}">
+                                        {{ s.name }}
+                                    </option>
+                                {% endif %}
+                            {% endfor %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                {% endfor %}
+            </select>
+    <input type="submit" value="Обновить" />
+</form>
+
+{% endblock %}
