@@ -82,7 +82,7 @@ class Table(models.Model):
     data_all_count = JSONField(null=True)
 
     def __str__(self):
-        return 'Таблица для ' + self.user
+        return 'Таблица для ' + str(self.user)
 
 
 class Med(models.Model):
