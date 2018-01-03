@@ -54,4 +54,11 @@ $(document).ready(function () {
     if ($('#app').length >= 1) {
         $('.buttons-print').addClass('btn')
     }
+    $('.link--del').click(function (e) {
+        if (!confirm('Вы действительно хотите удалить запись ?')) {
+            e.preventDefault()
+            e.stopPropagation()
+        }
+
+    })
 })
