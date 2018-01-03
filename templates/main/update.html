@@ -8,8 +8,12 @@
 
 {% block content %}
 
-    <div class="container wrapper update_page" style="margin-bottom: 100px;">
+    <div class="container wrapper relative update_page" style="margin-bottom: 100px;">
         <h2 class="title-main">Изменить запись</h2>
+       <span style="    position: absolute;
+    top: 13px;
+    left: auto;
+    right: 0;">Дата добавления: {{ med.pub_date | date }}</span>
         <form method="post" class="add">
             {% csrf_token %}
             <div class="add__top">
