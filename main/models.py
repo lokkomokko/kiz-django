@@ -200,7 +200,7 @@ class MedUpdate(UpdateView):
     def form_valid(self, form):
         from .modules import table
         instance = form.save(commit=False)
-        instance.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
+        instance.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days + 1
         instance.code_id_id = self.request.POST['code']
         instance.save()
         table.findTable(list(Med.objects.filter(user_id=self.request.user.pk)), self.request.user.pk)
