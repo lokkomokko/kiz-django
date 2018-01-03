@@ -5,7 +5,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import *
-from . modules import table
+from .modules import table
+
 
 def index(request):
     if request.user.is_authenticated:
@@ -16,7 +17,7 @@ def index(request):
                 new_item = form.save()
                 new_item.user_id = u_id
                 new_item.code_id_id = request.POST['code']
-                new_item.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days
+                new_item.days = (form.cleaned_data.get('date_2') - form.cleaned_data.get('date_1')).days + 1
 
                 new_item.save()
 
@@ -28,7 +29,8 @@ def index(request):
             sicks = Sicks.objects.all().values()
             single = SicksSingle.objects.all().values()
             under_group = SicksUndergroup.objects.values()
-            try: Table.objects.get(user_id=u_id)
+            try:
+                Table.objects.get(user_id=u_id)
             except Table.DoesNotExist:
                 table_json = False
             else:
@@ -39,7 +41,7 @@ def index(request):
 
             count_case = Med.objects.filter(user_id=u_id).count()
             more_case = 'Добавленные случаи: '
-            if  count_case > 10:
+            if count_case > 10:
                 more_case = False
 
             data = Med.objects.filter(user_id=u_id)[:10].values()
@@ -50,12 +52,12 @@ def index(request):
             'form': form,
             'data': data,
             'sicks': sicks,
-            'under_group' : under_group,
-            'table_json' : table_json,
-            'single' : single,
-            'more_case' : more_case,
+            'under_group': under_group,
+            'table_json': table_json,
+            'single': single,
+            'more_case': more_case,
             # 'table' : table.findTable(list(Med.objects.filter(user_id=u_id)), u_id),
-            'nums': [2,6,9,13,17, 22,30, 34, 36, 38, 44]
+            'nums': [2, 6, 9, 13, 17, 22, 30, 34, 36, 38, 44]
         })
     else:
         return redirect('login')
