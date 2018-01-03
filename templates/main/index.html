@@ -69,7 +69,7 @@
                             <span class="col-2">Возраст: {{ i.adult_age }}</span>
                             <span class="col-2"> Число дней:
                                 {{ i.days }}</span>
-                            <span class="col-2">Дата добавления: <br>{{ i.pub_date }}</span>
+                            <span class="col-2">Дата добавления: <br>{{ i.pub_date | date }}</span>
                             <a class="link" href="{% url 'update' pk=i.id %}">изменить</a>
                             <a class="link link--del" href="{% url 'delete' item_id=i.id %}">удалить</a></li>
                     {% endfor %}

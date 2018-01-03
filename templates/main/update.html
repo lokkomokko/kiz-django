@@ -8,8 +8,12 @@
 
 {% block content %}
 
-    <div class="container wrapper update_page" style="margin-bottom: 100px;">
+    <div class="container wrapper update_page relative" style="margin-bottom: 100px;">
         <h2 class="title-main">Изменить запись</h2>
+        <span style="    position: absolute;
+    top: 13px;
+    left: auto;
+    right: 0;">Дата добавления: {{ med.pub_date | date }}</span>
         <form method="post" class="add">
             {% csrf_token %}
             <div class="add__top">
@@ -19,11 +23,12 @@
             <label for="" style="margin-bottom: 10px;display: inline-block;">
                 Выбрать болезнь:
             </label>
-            <select id="list" multiple="multiple" name="code" >
+            <select id="list" multiple="multiple" name="code">
                 {% for i in sicks %}
                     {% for s in single %}
                         {% if s.group_name_id == i.id %}
-                            <option value="{{ s.id }}" {% if object.code_id_id == s.id %}selected="selected"{% endif %} data-section="{{ i.name }}">
+                            <option value="{{ s.id }}" {% if object.code_id_id == s.id %}selected="selected"{% endif %}
+                                    data-section="{{ i.name }}">
                                 {{ s.name }}
                             </option>
                         {% endif %}
@@ -36,7 +41,9 @@
 
                             {% for s in single %}
                                 {% if s.under_group_name_id == b.id %}
-                                    <option value="{{ s.id }}" {% if object.code_id_id == s.id %}selected="selected"{% endif %} data-section="{{ i.name }}/{{ b.name }}">
+                                    <option value="{{ s.id }}"
+                                            {% if object.code_id_id == s.id %}selected="selected"{% endif %}
+                                            data-section="{{ i.name }}/{{ b.name }}">
                                         {{ s.name }}
                                     </option>
                                 {% endif %}
@@ -49,7 +56,7 @@
             </select>
             <button class="btn" type="submit" id="create">Обновить</button>
         </form>
-     <a class="link"  href="{% url 'index' %}">назад</a>
+        <a class="link" href="{% url 'index' %}">назад</a>
     </div>
 
 {% endblock %}
@@ -60,7 +67,7 @@
     <script src="{% static 'js/jquery.tree-multiselect.min.js' %}"></script>
     <script src="{% static 'js/common.js' %}"></script>
 
-        <script>
+    <script>
         var django = django || {};
         django.jQuery = $;
     </script>
